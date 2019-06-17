@@ -19,7 +19,9 @@ bankaccount = '10001 · A-Woodforest LLC 3221'
 for i in TnxID:
   
   if counter != 0:
-    print (f"INSERT INTO DepositLine (DepositLinePaymentTinID, DepositToAccountRefFullName,TinDate,FQSaveToCache) Values ('{i}','{bankaccount}',d'{{{date}}}',1);")
+    print (f"INSERT INTO DepositLine (DepositLinePaymentTinID, DepositToAccountRefFullName,TinDate,FQSaveToCache) \\\
+    Values ('{i}','{bankaccount}',d'{{{date}}}',1);")
   else:
-    print (f"INSERT INTO DepositLine (DepositLinePaymentTinID, DepositToAccountRefFullName,TinDate,FQSaveToCache) Values ('{i}','{bankaccount}',d'{{{date}}}',0);")
+    print (f"INSERT INTO DepositLine (DepositLinePaymentTinID, DepositToAccountRefFullName,TinDate,FQSaveToCache) \\\
+    Values ('{i}','{bankaccount}',d'{{{date}}}',0);")
   counter = counter - 1
