@@ -11,6 +11,7 @@ TnxID = ['6F26E0-1560434603',
 '6F3516-1560459954',
 '6F3583-1560461304',
 '6F3597-1560463238',
+'6F3248-1560455033'
 ]
 
 counter = len(TnxID) - 1
@@ -19,9 +20,7 @@ bankaccount = '10001 · A-Woodforest LLC 3221'
 for i in TnxID:
   
   if counter != 0:
-    print (f"INSERT INTO DepositLine (DepositLinePaymentTinID, DepositToAccountRefFullName,TinDate,FQSaveToCache) \\\
-    Values ('{i}','{bankaccount}',d'{{{date}}}',1);")
+    print (f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{bankaccount}',{{d'{date}'}},1);")
   else:
-    print (f"INSERT INTO DepositLine (DepositLinePaymentTinID, DepositToAccountRefFullName,TinDate,FQSaveToCache) \\\
-    Values ('{i}','{bankaccount}',d'{{{date}}}',0);")
+    print (f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{bankaccount}',{{d'{date}'}},0);")
   counter = counter - 1
