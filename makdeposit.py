@@ -22,5 +22,5 @@ for i in TnxID:
   if counter != 0:
     print (f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{bankaccount}',{{d'{date}'}},1);")
   else:
-    print (f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{bankaccount}',{{d'{date}'}},0);")
+    print (f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{bankaccount}',{{d'{date}'}},0)")
   counter = counter - 1
