@@ -6,6 +6,7 @@ import csv
 from decimal import Decimal
 
 BANKACCOUNT = '10001 · A-Woodforest LLC 3221'
+QUERY_BACK_DAYS = 5
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 depositcsv = os.path.join(BASE_DIR,'deposit.xlsx')
@@ -28,7 +29,7 @@ print (f"Total deposit counts: {deposit_count}")
 
 cn = pyodbc.connect('DSN=QuickBooks Data;')
 
-sql = f"SELECT TxnID, TxnDate, Amount FROM ReceivePaymentToDeposit WHERE TxnDate >= {{d'{deposit_date}'}} AND Amount IN {amount_list}"
+sql = f"SELECT TxnID, TxnDate, Amount FROM ReceivePaymentToDeposit WHERE TxnDate >= ({{d'{deposit_date}'}} - {QUERY_BACK_DAYS}) AND Amount IN {amount_list}"
 
 df2 = pd.read_sql(sql,cn, parse_dates=['TxnDate'])
 df2['Amount'] = df2['Amount'].astype(np.float64).round(2)
@@ -42,17 +43,27 @@ print (f"Total deposit amount from QB undeposited funds: {deposit_amount_qb}")
 print (f"Total deposit counts: {deposit_count_qb}")
 
 TxnID = df2['TxnID'].tolist()
-counter = len(TxnID) - 1
+# counter = len(TxnID) - 1
 
-if deposit_amount == deposit_amount_qb and deposit_count == deposit_count_qb :
-    for i in TxnID:
-      if counter != 0:
-        print (f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{BANKACCOUNT}',{{d'{deposit_date}'}},1);")
-      else:
-        print (f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{BANKACCOUNT}',{{d'{deposit_date}'}},0)")
-      counter = counter - 1
-else:
+def print_insert():
+  counter = len(TxnID) - 1
+  for i in TxnID:
+    if counter != 0:
+      print (f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{BANKACCOUNT}',{{d'{deposit_date}'}},1);")
+    else:
+      print (f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{BANKACCOUNT}',{{d'{deposit_date}'}},0)")
+    counter = counter - 1  
+    
+
+if deposit_amount != deposit_amount_qb or deposit_count != deposit_count_qb :
   print ("Don't match")
+  response = input("Still want to process:? enter 'y' or 'n'")
+  if response == 'y':
+        print_insert()
+  else:
+    print("Stop")
+  
+        
 
 cn.close()
 
