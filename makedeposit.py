@@ -43,7 +43,7 @@ print (f"Total deposit amount from QB undeposited funds: {deposit_amount_qb}")
 print (f"Total deposit counts: {deposit_count_qb}")
 
 TxnID = df2['TxnID'].tolist()
-# counter = len(TxnID) - 1
+
 
 def print_insert():
   counter = len(TxnID) - 1
@@ -62,6 +62,8 @@ if deposit_amount != deposit_amount_qb or deposit_count != deposit_count_qb :
         print_insert()
   else:
     print("Stop")
+else:
+  print_insert()    
   
         
 
