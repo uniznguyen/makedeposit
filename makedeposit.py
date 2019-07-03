@@ -29,7 +29,7 @@ print (f"Total deposit counts: {deposit_count}")
 
 cn = pyodbc.connect('DSN=QuickBooks Data;')
 
-sql = f"SELECT TxnID, TxnDate, Amount FROM ReceivePaymentToDeposit WHERE TxnDate >= ({{d'{deposit_date}'}} - {QUERY_BACK_DAYS}) AND Amount IN {amount_list}"
+sql = f"SELECT TxnID, RefNumber, TxnDate, Amount FROM ReceivePaymentToDeposit WHERE TxnDate >= ({{d'{deposit_date}'}} - {QUERY_BACK_DAYS}) AND Amount IN {amount_list}"
 
 df2 = pd.read_sql(sql,cn, parse_dates=['TxnDate'])
 df2['Amount'] = df2['Amount'].astype(np.float64).round(2)
