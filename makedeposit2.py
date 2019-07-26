@@ -11,8 +11,8 @@ import csv
 
 BANKACCOUNT = '10001 · A-Woodforest LLC 3221'
 QUERY_BACK_DAYS = 5
-batch_number = 124
-deposit_date = '2019-07-25'
+batch_number = 126
+deposit_date = '2019-07-26'
 
 outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
 
@@ -74,6 +74,7 @@ print (f"Total deposit amount from QB undeposited funds: {deposit_amount_qb:,.2f
 print (f"Total deposit counts: {deposit_count_qb}")
 
 TxnID = df2['TxnID'].tolist()
+amount_qb = df2['Amount'].tolist()
 
 
 def print_insert():
@@ -85,8 +86,15 @@ def print_insert():
       print (f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{BANKACCOUNT}',{{d'{deposit_date}'}},0)")
     counter = counter - 1  
 
+def get_amount_not_in_qb(amount_list,amount_qb):
+  print ("This amount is not in QBB")
+  for each in amount_list:
+    if each not in amount_qb:
+      print ("="*5,each)      
+
 if net_settlement_amount != deposit_amount_qb or deposit_count != deposit_count_qb :
   print ("Don't match")
+  get_amount_not_in_qb(amount_list,amount_qb)
   response = input("Still want to process:? enter 'y' or 'n'")
   if response == 'y':
         print_insert()
