@@ -11,8 +11,8 @@ import csv
 
 BANKACCOUNT = '10001 · A-Woodforest LLC 3221'
 QUERY_BACK_DAYS = 5
-batch_number = 126
-deposit_date = '2019-07-26'
+batch_number = 128
+deposit_date = '2019-07-29'
 
 outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
 
@@ -27,7 +27,7 @@ for message in messages:
     if f"Settlement Report for Batch {batch_number}" in message.subject:
         print (message.Subject)
         message_content = message.body
-        Amounts = re.findall(r'(Purchase|Refund) \| Amount = \$(\d+,?\d+\.\d+)',message_content)
+        Amounts = re.findall(r'(Purchase|Refund) \| Amount = \$(\d*,?\d*\.\d*)',message_content)
 
         amount_list = []
 
@@ -53,6 +53,9 @@ if net_settlement_amount == total_transactions:
     print (f"deposit_count :{deposit_count}")
 else:
   print ("Total transactions don't match net settlement amount in batch report")
+  print (f"net_settlement_amount: {net_settlement_amount:,.2f}")
+  print (f"total_transactions: {total_transactions:,.2f}")
+  print (*amount_list, sep='\n')
   exit()    
 
 
