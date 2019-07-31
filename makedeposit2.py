@@ -1,7 +1,7 @@
 import win32com.client
 import re
-from datetime import datetime
-from decimal import Decimal
+# from datetime import datetime
+# from decimal import Decimal
 import pyodbc
 import os
 import pandas as pd
@@ -11,8 +11,8 @@ import csv
 
 BANKACCOUNT = '10001 · A-Woodforest LLC 3221'
 QUERY_BACK_DAYS = 5
-batch_number = 128
-deposit_date = '2019-07-29'
+batch_number = 131
+deposit_date = '2019-07-31'
 
 outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
 
@@ -104,4 +104,6 @@ if net_settlement_amount != deposit_amount_qb or deposit_count != deposit_count_
   else:
     print("Stop")
 else:
-  print_insert()                
+  print_insert()
+
+cn.close()
