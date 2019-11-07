@@ -7,12 +7,13 @@ import os
 import pandas as pd
 import numpy as np
 import csv
+import win32clipboard as cb
 
 
 BANKACCOUNT = '10001 · A-Woodforest LLC 3221'
 QUERY_BACK_DAYS = 5
-batch_number = 131
-deposit_date = '2019-07-31'
+batch_number = 204
+deposit_date = '2019-11-07'
 
 outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
 
@@ -81,13 +82,23 @@ amount_qb = df2['Amount'].tolist()
 
 
 def print_insert():
+  insert_query = ""
   counter = len(TxnID) - 1
   for i in TxnID:
     if counter != 0:
       print (f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{BANKACCOUNT}',{{d'{deposit_date}'}},1);")
+      insert_query = insert_query + f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{BANKACCOUNT}',{{d'{deposit_date}'}},1);" + "\n"
     else:
       print (f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{BANKACCOUNT}',{{d'{deposit_date}'}},0)")
-    counter = counter - 1  
+      insert_query = insert_query + f"INSERT INTO DepositLine (DepositLinePaymentTxnID, DepositToAccountRefFullName,TxnDate,FQSaveToCache) Values ('{i}','{BANKACCOUNT}',{{d'{deposit_date}'}},0)" + "\n"
+    counter = counter - 1
+  
+  ## this code is to copy the insert query string to clipboard
+  cb.OpenClipboard()
+  cb.EmptyClipboard()
+  cb.SetClipboardData(cb.CF_UNICODETEXT,insert_query)
+  cb.CloseClipboard()
+  ## this code is to copy the insert query string to clipboard    
 
 def get_amount_not_in_qb(amount_list,amount_qb):
   print ("This amount is not in QBB")
